@@ -1,34 +1,34 @@
-### Introduction
+### Introducción
 
-This second programming assignment will require you to write an R
-function that is able to cache potentially time-consuming computations.
-For example, taking the mean of a numeric vector is typically a fast
-operation. However, for a very long vector, it may take too long to
-compute the mean, especially if it has to be computed repeatedly (e.g.
-in a loop). If the contents of a vector are not changing, it may make
-sense to cache the value of the mean so that when we need it again, it
-can be looked up in the cache rather than recomputed. In this
-Programming Assignment you will take advantage of the scoping rules of
-the R language and how they can be manipulated to preserve state inside
-of an R object.
+Esta segunda tarea de programación requiere que escribas una función en R
+que pueda almacenar en caché cálculos que pueden consumir mucho tiempo.
 
-### Example: Caching the Mean of a Vector
+Por ejemplo, calcular la media de un vector numérico suele ser una operación rápida.
+Sin embargo, para un vector muy largo, calcular la media puede tardar demasiado,
+especialmente si se debe calcular repetidamente (por ejemplo,
+en un bucle). Si el contenido de un vector no cambia, puede ser conveniente
+almacenar en caché el valor de la media para que, cuando la necesitemos de 
+nuevo, podamos consultarla en la caché en lugar de recalcularla. 
+En esta tarea de programación, aprovecharás las reglas de ámbito del lenguaje R 
+y cómo se pueden manipular para preservar el estado dentro de un objeto de R.
 
-In this example we introduce the `<<-` operator which can be used to
-assign a value to an object in an environment that is different from the
-current environment. Below are two functions that are used to create a
-special object that stores a numeric vector and caches its mean.
+### Ejemplo: Almacenar en caché la media de un vector
 
-The first function, `makeVector` creates a special "vector", which is
-really a list containing a function to
+En este ejemplo, presentamos el operador `<<-`, que se puede usar para
+asignar un valor a un objeto en un entorno distinto del
+entorno actual. A continuación, se muestran dos funciones que se utilizan para crear un
+objeto especial que almacena un vector numérico y guarda en caché su media.
 
-1.  set the value of the vector
-2.  get the value of the vector
-3.  set the value of the mean
-4.  get the value of the mean
+La primera función, `makeVector`, crea un "vector" especial, que en realidad es 
+una lista que contiene una función para
 
-<!-- -->
+1. Asignar el valor al vector
+2. Obtener el valor del vector
+3. Asignar el valor a la media
+4. Obtener el valor de la media
 
+<!---->
+```r
     makeVector <- function(x = numeric()) {
             m <- NULL
             set <- function(y) {
@@ -42,14 +42,14 @@ really a list containing a function to
                  setmean = setmean,
                  getmean = getmean)
     }
+```
+La siguiente función calcula la media del vector especial
+creado con la función anterior. Sin embargo, primero comprueba si la 
+media ya se ha calculado. Si es así, obtiene la media de la caché y 
+omite el cálculo. De lo contrario, calcula la media de los datos y 
+establece su valor en la caché mediante la función `setmean`.
 
-The following function calculates the mean of the special "vector"
-created with the above function. However, it first checks to see if the
-mean has already been calculated. If so, it `get`s the mean from the
-cache and skips the computation. Otherwise, it calculates the mean of
-the data and sets the value of the mean in the cache via the `setmean`
-function.
-
+```r
     cachemean <- function(x, ...) {
             m <- x$getmean()
             if(!is.null(m)) {
@@ -61,45 +61,50 @@ function.
             x$setmean(m)
             m
     }
+```
 
 ### Assignment: Caching the Inverse of a Matrix
 
-Matrix inversion is usually a costly computation and there may be some
-benefit to caching the inverse of a matrix rather than computing it
-repeatedly (there are also alternatives to matrix inversion that we will
-not discuss here). Your assignment is to write a pair of functions that
-cache the inverse of a matrix.
+La inversión de matrices suele ser un cálculo costoso, por lo que podría ser más 
+ventajoso almacenar en caché la inversa de una matriz en lugar de calcularla 
+repetidamente (existen alternativas a la inversión de matrices que no abordaremos 
+aquí). Su tarea consiste en escribir un par de funciones que almacenen en caché la 
+inversa de una matriz.
 
-Write the following functions:
+Escriba las siguientes funciones:
 
-1.  `makeCacheMatrix`: This function creates a special "matrix" object
-    that can cache its inverse.
-2.  `cacheSolve`: This function computes the inverse of the special
-    "matrix" returned by `makeCacheMatrix` above. If the inverse has
-    already been calculated (and the matrix has not changed), then
-    `cacheSolve` should retrieve the inverse from the cache.
+1. `makeCacheMatrix`: Esta función crea un objeto "matriz" especial
+    que puede almacenar en caché su inversa.
 
-Computing the inverse of a square matrix can be done with the `solve`
-function in R. For example, if `X` is a square invertible matrix, then
-`solve(X)` returns its inverse.
+2. `cacheSolve`: Esta función calcula la inversa de la matriz especial
+    devuelta por `makeCacheMatrix`. Si la inversa ya se ha calculado 
+    (y la matriz no ha cambiado), entonces `cacheSolve` debe recuperarla
+    de la caché.
 
-For this assignment, assume that the matrix supplied is always
-invertible.
+Calcular la inversa de una matriz cuadrada se puede hacer con la función `solve`
+en R. Por ejemplo, si `X` es una matriz cuadrada invertible, entonces
+`solve(X)` devuelve su inversa.
 
-In order to complete this assignment, you must do the following:
+Para esta tarea, asuma que la matriz proporcionada es siempre invertible.
 
-1.  Fork the GitHub repository containing the stub R files at
-    [https://github.com/rdpeng/ProgrammingAssignment2](https://github.com/rdpeng/ProgrammingAssignment2)
-    to create a copy under your own account.
-2.  Clone your forked GitHub repository to your computer so that you can
-    edit the files locally on your own machine.
-3.  Edit the R file contained in the git repository and place your
-    solution in that file (please do not rename the file).
-4.  Commit your completed R file into YOUR git repository and push your
-    git branch to the GitHub repository under your account.
-5.  Submit to Coursera the URL to your GitHub repository that contains
-    the completed R code for the assignment.
+Para completar esta tarea, debe hacer lo siguiente:
 
-### Grading
+1. Crea una bifurcación del repositorio de GitHub que contiene los archivos R de ejemplo en
+  [https://github.com/rdpeng/ProgrammingAssignment2](https://github.com/rdpeng/ProgrammingAssignment2)
+  para crear una copia en tu propia cuenta.
 
-This assignment will be graded via peer assessment.
+2. Clona tu bifurcación del repositorio de GitHub en tu ordenador para poder
+  editar los archivos localmente en tu máquina.
+
+3. Edita el archivo R que se encuentra en el repositorio de Git e incluye tu
+  solución en ese archivo (no lo renombres).
+
+4. Confirma los cambios en tu archivo R completo en TU repositorio de Git y sube tu
+  rama de Git al repositorio de GitHub de tu cuenta.
+
+5. Envía a Coursera la URL de tu repositorio de GitHub que contiene
+  el código R completo para la tarea.
+
+### Calificación
+
+Esta tarea se calificará mediante evaluación entre pares.
